@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.film_explorer">
+    package="com.katzura.film_explorer">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="Film Explorer"

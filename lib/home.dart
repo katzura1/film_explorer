@@ -1,7 +1,6 @@
 import 'package:film_explorer/home_content.dart';
 import 'package:film_explorer/search.dart';
 import 'package:film_explorer/shared/theme.dart';
-import 'package:film_explorer/ui/widgets/cards.dart';
 import 'package:film_explorer/watch_list.dart';
 import 'package:flutter/material.dart';
 

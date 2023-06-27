@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
+            VALUE "CompanyName", "com.katzura" "\0"
             VALUE "FileDescription", "film_explorer" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "film_explorer" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 com.katzura. All rights reserved." "\0"
             VALUE "OriginalFilename", "film_explorer.exe" "\0"
             VALUE "ProductName", "film_explorer" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
