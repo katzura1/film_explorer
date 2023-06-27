@@ -1,3 +1,7 @@
+## Screenshots
+
+![App Screenshot](https://raw.githubusercontent.com/katzura1/film_explorer/main/assets/cover_film_explorer_resize.png?token=GHSAT0AAAAAAB4IOTJ3G4ZK7BG4GLGWVRFAZE2YYDA)
+
 ## Flutter Movie App
 
 Project Title: Flutter Movie App
