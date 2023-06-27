@@ -93,3 +93,8 @@ This project is licensed under the [MIT License](LICENSE). Please refer to the [
 ## Contact
 
 If you have any questions or inquiries, you can reach me at [denny.az45@gmail.com](mailto:denny.az45@gmail.com).
+
+## Reference Design Layout
+
+- [Luiz Carlos Zanini](https://www.figma.com/community/file/1059842558004825230?searchSessionId=lje649wo-zmi4ygc4de)
+- [Fransisco Santos](https://www.figma.com/community/file/1124835379376527920?searchSessionId=lje649wo-zmi4ygc4de)
