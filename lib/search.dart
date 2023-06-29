@@ -1,7 +1,9 @@
 import 'package:film_explorer/blocs/search/search_movie_bloc.dart';
 import 'package:film_explorer/detail.dart';
+import 'package:film_explorer/models/list_movie_model.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';
+import 'package:film_explorer/ui/widgets/buttons.dart';
 import 'package:film_explorer/ui/widgets/cards.dart';
 import 'package:film_explorer/ui/widgets/shimmers.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,9 @@ class _SearchState extends State<Search> {
   FocusNode searchFocusNode = FocusNode();
   bool isSearch = false;
   late SearchMovieBloc _searchMovieBloc;
+  List<Movie> _data = [];
+  int _page = 0;
+  int _totalPage = 1;
 
   @override
   void initState() {
@@ -81,7 +86,9 @@ class _SearchState extends State<Search> {
           ),
           controller: searchController,
           onFieldSubmitted: (value) {
-            _searchMovieBloc.add(SearchMovieGet(value));
+            _page = 0;
+            _searchMovieBloc.add(SearchMovieGet(value, 1));
+            setState(() {});
           },
         ),
         BlocConsumer<SearchMovieBloc, SearchMovieState>(
@@ -92,7 +99,7 @@ class _SearchState extends State<Search> {
             }
           },
           builder: (context, state) {
-            if (state is SearchMovieLoading) {
+            if (state is SearchMovieLoading && _page == 0) {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -104,34 +111,75 @@ class _SearchState extends State<Search> {
             }
 
             if (state is SearchMovieSuccess) {
-              if (state.data.results!.isNotEmpty) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: state.data.results!.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Detail(
-                              id: state.data.results![index].id!,
-                            ),
-                          ),
-                        );
-                      },
-                      child: SearchCardMovie(
-                        data: state.data.results![index],
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return emptyResult();
-              }
+              _data = state.data.results!;
+              _page = state.data.page!;
+              _totalPage = state.data.totalPages!;
             }
-            return firstPage();
+
+            if (_data.isNotEmpty) {
+              return Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _data.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Detail(
+                                id: _data[index].id!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: SearchCardMovie(
+                          data: _data[index],
+                        ),
+                      );
+                    },
+                  ),
+                  if (_page < _totalPage) ...[
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: backgroundBlackColor,
+                        borderRadius: BorderRadius.circular(
+                          60,
+                        ),
+                      ),
+                      margin: const EdgeInsets.only(top: 10),
+                      height: 50,
+                      child: (state is SearchMovieLoading)
+                          ? const Center(
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : TextButton(
+                              child: Text(
+                                "Load More",
+                                style: whiteTextStyle.copyWith(
+                                  fontWeight: semiBold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              onPressed: () {
+                                //for next time
+                                _searchMovieBloc.add(SearchMovieGetMore(searchController.text, _page + 1));
+                              },
+                            ),
+                    ),
+                  ]
+                ],
+              );
+            } else {
+              return emptyResult();
+            }
           },
         ),
       ],

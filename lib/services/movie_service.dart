@@ -90,10 +90,11 @@ class MovieService {
     }
   }
 
-  Future<ListMovieModel> searchMovies(String param) async {
+  Future<ListMovieModel> searchMovies(String param, int page) async {
     try {
+      print("$baseUrl/search/movie?query=$param&language=en-US&page=$page&region=id,us");
       final res = await http.get(
-        Uri.parse("$baseUrl/search/movie?query=$param&language=en-US&page=1&region=id,us"),
+        Uri.parse("$baseUrl/search/movie?query=$param&language=en-US&page=$page&region=id,us"),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",

@@ -13,8 +13,27 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
       if (event is SearchMovieGet) {
         try {
           emit(SearchMovieLoading());
-          final data = await MovieService().searchMovies(event.param);
+          final data = await MovieService().searchMovies(event.param, event.page);
           emit(SearchMovieSuccess(data));
+        } catch (e) {
+          emit(SearchMovieError(e.toString()));
+        }
+      }
+      if (event is SearchMovieGetMore) {
+        try {
+          ListMovieModel data = (state as SearchMovieSuccess).data;
+          emit(SearchMovieLoading());
+          await MovieService().searchMovies(event.param, event.page).then((value) {
+            List<Movie> updatedResult = data.results!;
+            updatedResult.addAll(value.results!);
+            data = data.copyWith(
+              page: value.page,
+              results: updatedResult,
+              totalPages: value.totalPages,
+              totalResults: value.totalResults,
+            );
+            emit(SearchMovieSuccess(data));
+          });
         } catch (e) {
           emit(SearchMovieError(e.toString()));
         }

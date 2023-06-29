@@ -9,5 +9,12 @@ abstract class SearchMovieEvent extends Equatable {
 
 class SearchMovieGet extends SearchMovieEvent {
   final String param;
-  const SearchMovieGet(this.param);
+  final int page;
+  const SearchMovieGet(this.param, this.page);
+}
+
+class SearchMovieGetMore extends SearchMovieEvent {
+  final String param;
+  final int page;
+  const SearchMovieGetMore(this.param, this.page);
 }
