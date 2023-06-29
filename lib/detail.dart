@@ -1,5 +1,4 @@
 import 'package:film_explorer/blocs/detail_movie/detail_movie_bloc.dart';
-import 'package:film_explorer/models/detail_movie_model.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';
 import 'package:film_explorer/shared/values.dart';
@@ -7,7 +6,6 @@ import 'package:film_explorer/ui/widgets/cards.dart';
 import 'package:film_explorer/ui/widgets/shimmers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class Detail extends StatefulWidget {
   final int id;

@@ -119,7 +119,7 @@ class MovieService {
           "Authorization": "Bearer $token",
         },
       );
-      print(json.decode(res.body)['release_date']);
+      // print(json.decode(res.body)['release_date']);
       if (res.statusCode == 200) {
         return DetailMovieModel.fromJson(json.decode(res.body));
       } else {

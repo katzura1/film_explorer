@@ -1,16 +1,14 @@
 import 'package:film_explorer/blocs/now_playing_movie/now_playing_movie_bloc.dart';
 import 'package:film_explorer/blocs/popular_movie/popular_movie_bloc.dart';
 import 'package:film_explorer/blocs/top_rated_movie/top_rated_movie_bloc.dart';
-import 'package:film_explorer/blocs/upcomfing/upcoming_movie_bloc.dart';
+import 'package:film_explorer/blocs/upcoming/upcoming_movie_bloc.dart';
 import 'package:film_explorer/detail.dart';
 import 'package:film_explorer/home.dart';
-import 'package:film_explorer/search.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';
 import 'package:film_explorer/shared/values.dart';
 import 'package:film_explorer/ui/widgets/cards.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeContent extends StatefulWidget {
@@ -21,7 +19,7 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  late MovieBloc _MovieBloc;
+  late MovieBloc _movieBloc;
   late NowPlayingMovieBloc _nowPlayingMovieBloc;
   late TopRatedMovieBloc _topRatedMovieBloc;
   late UpcomingMovieBloc _upcomingMovieBloc;
@@ -30,7 +28,7 @@ class _HomeContentState extends State<HomeContent> {
   @override
   void initState() {
     super.initState();
-    _MovieBloc = MovieBloc()..add(MovieGet());
+    _movieBloc = MovieBloc()..add(MovieGet());
     _nowPlayingMovieBloc = NowPlayingMovieBloc()..add(NowPlayingMovieGet());
     _topRatedMovieBloc = TopRatedMovieBloc()..add(TopRatedMovieGet());
     _upcomingMovieBloc = UpcomingMovieBloc()..add(UpcomingMovieGet());
@@ -40,7 +38,7 @@ class _HomeContentState extends State<HomeContent> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        _MovieBloc.add(MovieGet());
+        _movieBloc.add(MovieGet());
         _nowPlayingMovieBloc.add(NowPlayingMovieGet());
         _topRatedMovieBloc.add(TopRatedMovieGet());
         _upcomingMovieBloc.add(UpcomingMovieGet());
@@ -99,7 +97,7 @@ class _HomeContentState extends State<HomeContent> {
             height: 24,
           ),
           BlocConsumer<MovieBloc, MovieState>(
-            bloc: _MovieBloc,
+            bloc: _movieBloc,
             listener: (context, state) {
               if (state is MovieError) {
                 showCustomSnackbar(context, state.e);
@@ -107,7 +105,7 @@ class _HomeContentState extends State<HomeContent> {
             },
             builder: (context, state) {
               if (state is MovieLoading) {
-                return ShimmerMovie();
+                return const ShimmerMovie();
               }
               if (state is MovieSuccess) {
                 return SingleChildScrollView(
@@ -219,7 +217,7 @@ class _HomeContentState extends State<HomeContent> {
             ),
             itemCount: 6,
             itemBuilder: (BuildContext context, int index) {
-              return ShimmerListHomeMovie();
+              return const ShimmerListHomeMovie();
             },
           );
         }
@@ -291,7 +289,7 @@ class _HomeContentState extends State<HomeContent> {
             ),
             itemCount: 6,
             itemBuilder: (BuildContext context, int index) {
-              return ShimmerListHomeMovie();
+              return const ShimmerListHomeMovie();
             },
           );
         }
@@ -363,7 +361,7 @@ class _HomeContentState extends State<HomeContent> {
             ),
             itemCount: 6,
             itemBuilder: (BuildContext context, int index) {
-              return ShimmerListHomeMovie();
+              return const ShimmerListHomeMovie();
             },
           );
         }

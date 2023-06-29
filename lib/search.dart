@@ -3,7 +3,6 @@ import 'package:film_explorer/detail.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';
 import 'package:film_explorer/ui/widgets/cards.dart';
-import 'package:film_explorer/ui/widgets/forms.dart';
 import 'package:film_explorer/ui/widgets/shimmers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

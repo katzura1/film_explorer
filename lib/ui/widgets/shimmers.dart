@@ -21,29 +21,29 @@ class ShimmerParagraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: const [
         ShimmerLine(),
         ShimmerLine(),
         ShimmerLine(),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
         ShimmerLine(),
         ShimmerLine(),
         ShimmerLine(),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
         ShimmerLine(),
         ShimmerLine(),
         ShimmerLine(),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
         ShimmerLine(),
         ShimmerLine(),
         ShimmerLine(),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
       ],
@@ -74,26 +74,26 @@ class ShimmerSearchCardMovie extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 ShimmerLine(),
                 ShimmerLine(),
                 ShimmerLine(),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 ShimmerLine(),
                 ShimmerLine(),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
                 ShimmerLine(),
                 ShimmerLine(),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
                 ShimmerLine(),
                 ShimmerLine(),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],

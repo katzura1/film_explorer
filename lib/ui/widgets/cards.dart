@@ -6,7 +6,6 @@ import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/trailer_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../shared/theme.dart';
 import '../../shared/values.dart';

@@ -2,13 +2,7 @@
 //
 //     final ListMovieModel = ListMovieModelFromJson(jsonString);
 
-import 'dart:convert';
-
 import 'package:film_explorer/shared/functions.dart';
-
-ListMovieModel ListMovieModelFromJson(String str) => ListMovieModel.fromJson(json.decode(str));
-
-String ListMovieModelToJson(ListMovieModel data) => json.encode(data.toJson());
 
 class ListMovieModel {
   final int? page;
@@ -25,13 +19,13 @@ class ListMovieModel {
 
   ListMovieModel copyWith({
     int? page,
-    List<Movie>? data,
+    List<Movie>? results,
     int? totalPages,
     int? totalResults,
   }) =>
       ListMovieModel(
         page: page ?? this.page,
-        results: data ?? this.results,
+        results: results ?? this.results,
         totalPages: totalPages ?? this.totalPages,
         totalResults: totalResults ?? this.totalResults,
       );

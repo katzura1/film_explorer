@@ -4,6 +4,7 @@ import 'package:film_explorer/shared/theme.dart';
 import 'package:film_explorer/watch_list.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Home extends StatefulWidget {
   int selectedIndex;
   Home({

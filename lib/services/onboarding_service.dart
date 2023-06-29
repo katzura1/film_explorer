@@ -5,7 +5,7 @@ class OnboardingService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // Write value
     await prefs.setBool('onboarding_skip', true);
-    print(await checkOnboarding());
+    // print(await checkOnboarding());
   }
 
   Future<bool> checkOnboarding() async {
