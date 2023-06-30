@@ -41,148 +41,158 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(24),
-      children: [
-        const SizedBox(
-          height: 16,
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
         ),
-        TextFormField(
-          style: whiteTextStyle,
-          focusNode: searchFocusNode,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: backgroundInput,
-            hintText: 'Movie Name, Year released, and etc...',
-            hintStyle: grayTextStyle,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: grayColor,
-                width: 0,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: grayColor,
-                width: 0,
-              ),
-            ),
-            suffixIcon: Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.rotationY(3.14159), // Rotasi horizontal (180 derajat)
-              child: Icon(
-                Icons.search,
-                color: grayColor,
-                size: 24,
-              ),
-            ),
-          ),
-          controller: searchController,
-          onFieldSubmitted: (value) {
-            _page = 0;
-            _searchMovieBloc.add(SearchMovieGet(value, 1));
-            setState(() {});
-          },
-        ),
-        BlocConsumer<SearchMovieBloc, SearchMovieState>(
-          bloc: _searchMovieBloc,
-          listener: (context, state) {
-            if (state is SearchMovieError) {
-              showCustomSnackbar(context, state.e);
-            }
-          },
-          builder: (context, state) {
-            if (state is SearchMovieLoading && _page == 0) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return const ShimmerSearchCardMovie();
-                },
-              );
-            }
-
-            if (state is SearchMovieSuccess) {
-              _data = state.data.results!;
-              _page = state.data.page!;
-              _totalPage = state.data.totalPages!;
-            }
-
-            if (_data.isNotEmpty) {
-              return Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _data.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Detail(
-                                id: _data[index].id!,
-                              ),
-                            ),
-                          );
-                        },
-                        child: SearchCardMovie(
-                          data: _data[index],
-                        ),
-                      );
-                    },
+        child: Column(
+          children: [
+            TextFormField(
+              style: whiteTextStyle,
+              focusNode: searchFocusNode,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: backgroundInput,
+                hintText: 'Movie Name, Year released, and etc...',
+                hintStyle: grayTextStyle,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(
+                    color: grayColor,
+                    width: 0,
                   ),
-                  if (_page < _totalPage) ...[
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: backgroundBlackColor,
-                        borderRadius: BorderRadius.circular(
-                          60,
-                        ),
-                      ),
-                      margin: const EdgeInsets.only(top: 10),
-                      height: 50,
-                      child: (state is SearchMovieLoading)
-                          ? const Center(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : TextButton(
-                              child: Text(
-                                "Load More",
-                                style: whiteTextStyle.copyWith(
-                                  fontWeight: semiBold,
-                                  fontSize: 16,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(
+                    color: grayColor,
+                    width: 0,
+                  ),
+                ),
+                suffixIcon: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(3.14159), // Rotasi horizontal (180 derajat)
+                  child: Icon(
+                    Icons.search,
+                    color: grayColor,
+                    size: 24,
+                  ),
+                ),
+              ),
+              controller: searchController,
+              onFieldSubmitted: (value) {
+                _page = 0;
+                _searchMovieBloc.add(SearchMovieGet(value, 1));
+                setState(() {});
+              },
+            ),
+            const SizedBox(
+              height: 14,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: BlocConsumer<SearchMovieBloc, SearchMovieState>(
+                  bloc: _searchMovieBloc,
+                  listener: (context, state) {
+                    if (state is SearchMovieError) {
+                      showCustomSnackbar(context, state.e);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is SearchMovieLoading && _page == 0) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          return const ShimmerSearchCardMovie();
+                        },
+                      );
+                    }
+
+                    if (state is SearchMovieSuccess) {
+                      _data = state.data.results!;
+                      _page = state.data.page!;
+                      _totalPage = state.data.totalPages!;
+                    }
+
+                    if (_data.isNotEmpty) {
+                      return Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _data.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Detail(
+                                        id: _data[index].id!,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: SearchCardMovie(
+                                  data: _data[index],
+                                ),
+                              );
+                            },
+                          ),
+                          if (_page < _totalPage) ...[
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: backgroundBlackColor,
+                                borderRadius: BorderRadius.circular(
+                                  60,
                                 ),
                               ),
-                              onPressed: () {
-                                //for next time
-                                _searchMovieBloc.add(SearchMovieGetMore(searchController.text, _page + 1));
-                              },
+                              margin: const EdgeInsets.only(top: 10),
+                              height: 50,
+                              child: (state is SearchMovieLoading)
+                                  ? const Center(
+                                      child: SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : TextButton(
+                                      child: Text(
+                                        "Load More",
+                                        style: whiteTextStyle.copyWith(
+                                          fontWeight: semiBold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        //for next time
+                                        _searchMovieBloc.add(SearchMovieGetMore(searchController.text, _page + 1));
+                                      },
+                                    ),
                             ),
-                    ),
-                  ]
-                ],
-              );
-            } else {
-              return emptyResult();
-            }
-          },
+                          ]
+                        ],
+                      );
+                    } else {
+                      return emptyResult();
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

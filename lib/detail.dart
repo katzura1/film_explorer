@@ -529,7 +529,7 @@ class _DetailState extends State<Detail> {
                   ),
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 18,
                 ),
                 if (selectedIndex == 0) ...[
                   Text(
@@ -537,6 +537,7 @@ class _DetailState extends State<Detail> {
                     style: whiteTextStyle.copyWith(
                       fontSize: 12,
                     ),
+                    textAlign: TextAlign.justify,
                   ),
                 ] else ...[
                   if (state.review.results!.isNotEmpty) ...[

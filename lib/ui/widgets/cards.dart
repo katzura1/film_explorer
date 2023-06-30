@@ -7,6 +7,7 @@ import 'package:film_explorer/trailer_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../detail.dart';
 import '../../shared/theme.dart';
 import '../../shared/values.dart';
 
@@ -21,46 +22,66 @@ class TopMovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 210,
-      width: 145,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
-      decoration: BoxDecoration(
-        color: grayColor,
-        borderRadius: BorderRadius.circular(16),
-        image: data.posterPath == null
-            ? null
-            : DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(
-                  "$baseImageUrl/${data.posterPath}",
+    return Column(
+      children: [
+        Container(
+          height: 210,
+          width: 145,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 15,
+          ),
+          decoration: BoxDecoration(
+            color: grayColor,
+            borderRadius: BorderRadius.circular(16),
+            image: data.posterPath == null
+                ? null
+                : DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      "$baseImageUrl/${data.posterPath}",
+                    ),
+                  ),
+          ),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              margin: const EdgeInsets.only(
+                left: 15,
+              ),
+              child: Text(
+                rank.toString(),
+                style: whiteTextStyle.copyWith(
+                  fontSize: 70,
+                  fontWeight: semiBold,
+                  shadows: [
+                    Shadow(
+                      color: backgroundBlackColor,
+                      offset: const Offset(2, 5),
+                      blurRadius: 5,
+                    ),
+                  ],
                 ),
               ),
-      ),
-      child: Align(
-        alignment: Alignment.bottomLeft,
-        child: Container(
-          margin: const EdgeInsets.only(
-            left: 15,
-          ),
-          child: Text(
-            rank.toString(),
-            style: whiteTextStyle.copyWith(
-              fontSize: 70,
-              fontWeight: semiBold,
-              shadows: [
-                Shadow(
-                  color: backgroundBlackColor,
-                  offset: const Offset(2, 5),
-                  blurRadius: 5,
-                ),
-              ],
             ),
           ),
         ),
-      ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          width: 145,
+          child: Text(
+            data.title.toString(),
+            style: whiteTextStyle.copyWith(
+              fontSize: 14,
+              fontWeight: bold,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -202,6 +223,7 @@ class SearchCardMovie extends StatelessWidget {
             height: 120,
             width: 95,
             decoration: BoxDecoration(
+              color: backgroundInput,
               borderRadius: BorderRadius.circular(16),
               image: DecorationImage(
                 fit: BoxFit.cover,
@@ -402,7 +424,7 @@ class Cast extends StatelessWidget {
       width: 75,
       height: 100,
       margin: const EdgeInsets.only(
-        right: 4,
+        right: 8,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -560,6 +582,60 @@ class TrailerMovieCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class HomeMovieCard extends StatelessWidget {
+  final Movie data;
+  const HomeMovieCard({
+    super.key,
+    required this.data,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Detail(
+              id: data.id!,
+            ),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 150,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: grayColor,
+              image: data.posterPath == null
+                  ? null
+                  : DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage("$baseImageUrl/${data.posterPath}"),
+                    ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            data.title.toString(),
+            style: whiteTextStyle.copyWith(
+              fontSize: 12,
+              fontWeight: semiBold,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

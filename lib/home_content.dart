@@ -36,162 +36,164 @@ class _HomeContentState extends State<HomeContent> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        _movieBloc.add(MovieGet());
-        _nowPlayingMovieBloc.add(NowPlayingMovieGet());
-        _topRatedMovieBloc.add(TopRatedMovieGet());
-        _upcomingMovieBloc.add(UpcomingMovieGet());
-      },
-      child: ListView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(24),
-        children: [
-          const SizedBox(
-            height: 42,
-          ),
-          Text(
-            "What do you want to watch?",
-            style: whiteTextStyle.copyWith(
-              fontSize: 18,
-              fontWeight: semiBold,
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _movieBloc.add(MovieGet());
+          _nowPlayingMovieBloc.add(NowPlayingMovieGet());
+          _topRatedMovieBloc.add(TopRatedMovieGet());
+          _upcomingMovieBloc.add(UpcomingMovieGet());
+        },
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(24),
+          children: [
+            const SizedBox(
+              height: 42,
             ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Home(selectedIndex: 1)));
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: backgroundInput,
-                borderRadius: BorderRadius.circular(16),
+            Text(
+              "What do you want to watch?",
+              style: whiteTextStyle.copyWith(
+                fontSize: 18,
+                fontWeight: semiBold,
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 11,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Home(selectedIndex: 1)));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: backgroundInput,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 22,
+                  vertical: 11,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Search",
+                      style: grayTextStyle,
+                    ),
+                    Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(3.14159), // Rotasi horizontal (180 derajat)
+                      child: Icon(
+                        Icons.search,
+                        color: grayColor,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            BlocConsumer<MovieBloc, MovieState>(
+              bloc: _movieBloc,
+              listener: (context, state) {
+                if (state is MovieError) {
+                  showCustomSnackbar(context, state.e);
+                }
+              },
+              builder: (context, state) {
+                if (state is MovieLoading) {
+                  return const ShimmerMovie();
+                }
+                if (state is MovieSuccess) {
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: state.data.results!.map((item) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Detail(
+                                  id: item.id!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: TopMovieCard(
+                            data: item,
+                            rank: state.data.results!.indexOf(item) + 1,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    // child: ShimmerMovie(),
+                  );
+                }
+                return Container();
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Search",
-                    style: grayTextStyle,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndexTab = 0;
+                        _nowPlayingMovieBloc.add(NowPlayingMovieGet());
+                      });
+                    },
+                    child: CategoryCard(
+                      name: "Now Playing",
+                      isSelected: selectedIndexTab == 0,
+                    ),
                   ),
-                  Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(3.14159), // Rotasi horizontal (180 derajat)
-                    child: Icon(
-                      Icons.search,
-                      color: grayColor,
-                      size: 20,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndexTab = 1;
+                        _topRatedMovieBloc.add(TopRatedMovieGet());
+                      });
+                    },
+                    child: CategoryCard(
+                      name: "Top Rated",
+                      isSelected: selectedIndexTab == 1,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndexTab = 2;
+                        _upcomingMovieBloc.add(UpcomingMovieGet());
+                      });
+                    },
+                    child: CategoryCard(
+                      name: "Upcoming",
+                      isSelected: selectedIndexTab == 2,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          BlocConsumer<MovieBloc, MovieState>(
-            bloc: _movieBloc,
-            listener: (context, state) {
-              if (state is MovieError) {
-                showCustomSnackbar(context, state.e);
-              }
-            },
-            builder: (context, state) {
-              if (state is MovieLoading) {
-                return const ShimmerMovie();
-              }
-              if (state is MovieSuccess) {
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: state.data.results!.map((item) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Detail(
-                                id: item.id!,
-                              ),
-                            ),
-                          );
-                        },
-                        child: TopMovieCard(
-                          data: item,
-                          rank: state.data.results!.indexOf(item) + 1,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  // child: ShimmerMovie(),
-                );
-              }
-              return Container();
-            },
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedIndexTab = 0;
-                      _nowPlayingMovieBloc.add(NowPlayingMovieGet());
-                    });
-                  },
-                  child: CategoryCard(
-                    name: "Now Playing",
-                    isSelected: selectedIndexTab == 0,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedIndexTab = 1;
-                      _topRatedMovieBloc.add(TopRatedMovieGet());
-                    });
-                  },
-                  child: CategoryCard(
-                    name: "Top Rated",
-                    isSelected: selectedIndexTab == 1,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedIndexTab = 2;
-                      _upcomingMovieBloc.add(UpcomingMovieGet());
-                    });
-                  },
-                  child: CategoryCard(
-                    name: "Upcoming",
-                    isSelected: selectedIndexTab == 2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (selectedIndexTab == 0) ...[
-            listNowPlaying(),
-          ] else if (selectedIndexTab == 1) ...[
-            listTopRated(),
-          ] else if (selectedIndexTab == 2) ...[
-            listUpcoming(),
-          ]
-        ],
+            if (selectedIndexTab == 0) ...[
+              listNowPlaying(),
+            ] else if (selectedIndexTab == 1) ...[
+              listTopRated(),
+            ] else if (selectedIndexTab == 2) ...[
+              listUpcoming(),
+            ]
+          ],
+        ),
       ),
     );
   }
@@ -234,30 +236,7 @@ class _HomeContentState extends State<HomeContent> {
             ),
             itemCount: state.data.results!.length,
             itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Detail(
-                        id: state.data.results![index].id!,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: grayColor,
-                    image: state.data.results![index].posterPath == null
-                        ? null
-                        : DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage("$baseImageUrl/${state.data.results![index].posterPath}"),
-                          ),
-                  ),
-                ),
-              );
+              return HomeMovieCard(data: state.data.results![index]);
               // return ShimmerListHomeMovie();
             },
           );
@@ -306,30 +285,7 @@ class _HomeContentState extends State<HomeContent> {
             ),
             itemCount: state.data.results!.length,
             itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Detail(
-                        id: state.data.results![index].id!,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: grayColor,
-                    image: state.data.results![index].posterPath == null
-                        ? null
-                        : DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage("$baseImageUrl/${state.data.results![index].posterPath}"),
-                          ),
-                  ),
-                ),
-              );
+              return HomeMovieCard(data: state.data.results![index]);
               // return ShimmerListHomeMovie();
             },
           );
@@ -378,31 +334,7 @@ class _HomeContentState extends State<HomeContent> {
             ),
             itemCount: state.data.results!.length,
             itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Detail(
-                        id: state.data.results![index].id!,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    // color: Colors.primaries[index % Colors.primaries.length],
-                    color: grayColor,
-                    image: state.data.results![index].posterPath == null
-                        ? null
-                        : DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage("$baseImageUrl/${state.data.results![index].posterPath}"),
-                          ),
-                  ),
-                ),
-              );
+              return HomeMovieCard(data: state.data.results![index]);
               // return ShimmerListHomeMovie();
             },
           );
