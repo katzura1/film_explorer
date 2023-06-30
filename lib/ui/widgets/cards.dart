@@ -1,4 +1,5 @@
-import 'package:film_explorer/models/credit_movie_model.dart';
+import 'package:film_explorer/genre.dart';
+import 'package:film_explorer/models/genre_model.dart';
 import 'package:film_explorer/models/list_movie_model.dart';
 import 'package:film_explorer/models/review_movie_model.dart';
 import 'package:film_explorer/models/trailer_movie_model.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../detail.dart';
+import '../../models/cast_model.dart';
 import '../../shared/theme.dart';
 import '../../shared/values.dart';
 
@@ -474,28 +476,41 @@ class Cast extends StatelessWidget {
 }
 
 class CardGenre extends StatelessWidget {
-  final String name;
+  final GenreModel data;
   const CardGenre({
     super.key,
-    required this.name,
+    required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 5,
-      ),
-      decoration: BoxDecoration(
-        color: backgroundInput,
-        borderRadius: BorderRadius.circular(34),
-      ),
-      child: Text(
-        name,
-        style: whiteTextStyle.copyWith(
-          fontSize: 15,
-          fontWeight: medium,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Genre(
+              title: data.name.toString(),
+              id: data.id!,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 5,
+        ),
+        decoration: BoxDecoration(
+          color: backgroundInput,
+          borderRadius: BorderRadius.circular(34),
+        ),
+        child: Text(
+          data.name.toString(),
+          style: whiteTextStyle.copyWith(
+            fontSize: 15,
+            fontWeight: medium,
+          ),
         ),
       ),
     );
@@ -526,62 +541,74 @@ class TrailerMovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async => openYouTubeApp(data.key.toString(), context),
-      child: Container(
-        height: 120,
-        width: 240,
-        margin: const EdgeInsets.only(right: 15),
-        decoration: BoxDecoration(
-          // color: backgroundInput,
-          borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(
-              thumbnailUrl(data.key),
-            ),
-          ),
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              colors: [backgroundBlackColor.withOpacity(0.2), backgroundBlackColor.withOpacity(0.7)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-            backgroundBlendMode: BlendMode.colorBurn, // Mengatur mode blend untuk latar belakang
-            // borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: backgroundColor.withOpacity(0.5),
-                blurRadius: 25.0,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.play_arrow_outlined,
-                color: whiteColor,
-                size: 35,
-              ),
-              Text(
-                data.name.toString(),
-                style: whiteTextStyle.copyWith(
-                  shadows: shadow,
+      child: Column(
+        children: [
+          Container(
+            height: 120,
+            width: 240,
+            margin: const EdgeInsets.only(right: 15),
+            decoration: BoxDecoration(
+              // color: backgroundInput,
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  thumbnailUrl(data.key),
                 ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
               ),
-            ],
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  colors: [backgroundBlackColor.withOpacity(0.2), backgroundBlackColor.withOpacity(0.7)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                backgroundBlendMode: BlendMode.colorBurn, // Mengatur mode blend untuk latar belakang
+                // borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: backgroundColor.withOpacity(0.5),
+                    blurRadius: 25.0,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.play_arrow_sharp,
+                    color: whiteColor,
+                    size: 60,
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+          const SizedBox(
+            height: 6,
+          ),
+          SizedBox(
+            width: 240,
+            child: Text(
+              data.name.toString(),
+              style: whiteTextStyle.copyWith(
+                shadows: shadow,
+                fontSize: 12,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

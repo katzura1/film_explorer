@@ -6,13 +6,16 @@ import 'package:film_explorer/detail.dart';
 import 'package:film_explorer/home.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';
-import 'package:film_explorer/shared/values.dart';
 import 'package:film_explorer/ui/widgets/cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeContent extends StatefulWidget {
-  const HomeContent({super.key});
+  final ScrollController controller;
+  const HomeContent({
+    super.key,
+    required this.controller,
+  });
 
   @override
   State<HomeContent> createState() => _HomeContentState();
@@ -45,6 +48,7 @@ class _HomeContentState extends State<HomeContent> {
           _upcomingMovieBloc.add(UpcomingMovieGet());
         },
         child: ListView(
+          controller: widget.controller,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(24),
           children: [

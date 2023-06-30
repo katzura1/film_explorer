@@ -17,17 +17,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Widget> _pages = [
-    const HomeContent(
-      key: PageStorageKey('Page1'),
-    ),
-    const Search(
-      key: PageStorageKey('Page2'),
-    ),
-    const WatchList(
-      key: PageStorageKey('Page3'),
-    ),
-  ];
+  final ScrollController controllerHome = ScrollController();
+  final ScrollController controllerSearch = ScrollController();
+  late List<Widget> _pages = [];
 
   final List<AppBar?> _appBars = [
     null, // Halaman pertama tanpa AppBar
@@ -42,12 +34,46 @@ class _HomeState extends State<Home> {
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override
+  void initState() {
+    super.initState();
+    _pages = [
+      HomeContent(
+        key: const PageStorageKey('Page1'),
+        controller: controllerHome,
+      ),
+      Search(
+        key: const PageStorageKey('Page2'),
+        controller: controllerSearch,
+      ),
+      const WatchList(
+        key: PageStorageKey('Page3'),
+      ),
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBars[widget.selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: widget.selectedIndex,
         onTap: (int index) {
+          if (widget.selectedIndex == index) {
+            if (widget.selectedIndex == 0) {
+              controllerHome.animateTo(
+                0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            } else if (widget.selectedIndex == 1) {
+              controllerSearch.animateTo(
+                0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            }
+          }
+
           setState(() {
             widget.selectedIndex = index;
           });

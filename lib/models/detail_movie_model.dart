@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:film_explorer/models/genre_model.dart';
 import 'package:film_explorer/shared/functions.dart';
 
 DetailMovieModel detailMovieModelFromJson(String str) => DetailMovieModel.fromJson(json.decode(str));
@@ -14,7 +15,7 @@ class DetailMovieModel {
   final bool? adult;
   final String? backdropPath;
   final int? budget;
-  final List<Genre>? genres;
+  final List<GenreModel>? genres;
   final String? homepage;
   final int? id;
   final String? imdbId;
@@ -59,7 +60,7 @@ class DetailMovieModel {
     bool? adult,
     String? backdropPath,
     int? budget,
-    List<Genre>? genres,
+    List<GenreModel>? genres,
     String? homepage,
     int? id,
     String? imdbId,
@@ -104,7 +105,7 @@ class DetailMovieModel {
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         budget: json["budget"],
-        genres: json["genres"] == null ? [] : List<Genre>.from(json["genres"]!.map((x) => Genre.fromJson(x))),
+        genres: json["genres"] == null ? [] : List<GenreModel>.from(json["genres"]!.map((x) => GenreModel.fromJson(x))),
         homepage: json["homepage"],
         id: json["id"],
         imdbId: json["imdb_id"],
@@ -145,34 +146,5 @@ class DetailMovieModel {
         "video": video,
         "vote_average": voteAverage,
         "vote_count": voteCount,
-      };
-}
-
-class Genre {
-  final int? id;
-  final String? name;
-
-  Genre({
-    this.id,
-    this.name,
-  });
-
-  Genre copyWith({
-    int? id,
-    String? name,
-  }) =>
-      Genre(
-        id: id ?? this.id,
-        name: name ?? this.name,
-      );
-
-  factory Genre.fromJson(Map<String, dynamic> json) => Genre(
-        id: json["id"],
-        name: json["name"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
       };
 }

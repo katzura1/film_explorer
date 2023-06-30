@@ -1,16 +1,20 @@
+import 'package:film_explorer/blocs/genre/genre_bloc.dart';
 import 'package:film_explorer/blocs/search/search_movie_bloc.dart';
 import 'package:film_explorer/detail.dart';
 import 'package:film_explorer/models/list_movie_model.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';
-import 'package:film_explorer/ui/widgets/buttons.dart';
 import 'package:film_explorer/ui/widgets/cards.dart';
 import 'package:film_explorer/ui/widgets/shimmers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Search extends StatefulWidget {
-  const Search({super.key});
+  final ScrollController controller;
+  const Search({
+    super.key,
+    required this.controller,
+  });
 
   @override
   State<Search> createState() => _SearchState();
@@ -21,6 +25,7 @@ class _SearchState extends State<Search> {
   FocusNode searchFocusNode = FocusNode();
   bool isSearch = false;
   late SearchMovieBloc _searchMovieBloc;
+  late GenreBloc _genreBloc;
   List<Movie> _data = [];
   int _page = 0;
   int _totalPage = 1;
@@ -30,6 +35,7 @@ class _SearchState extends State<Search> {
     super.initState();
     // searchFocusNode.requestFocus();
     _searchMovieBloc = SearchMovieBloc();
+    _genreBloc = GenreBloc()..add(GenreGet());
   }
 
   @override
@@ -97,6 +103,7 @@ class _SearchState extends State<Search> {
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
+                controller: widget.controller,
                 child: BlocConsumer<SearchMovieBloc, SearchMovieState>(
                   bloc: _searchMovieBloc,
                   listener: (context, state) {
@@ -238,7 +245,7 @@ class _SearchState extends State<Search> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(
-          height: 144,
+          height: 10,
         ),
         Image.asset(
           "assets/icon_no_result.png",
@@ -264,6 +271,38 @@ class _SearchState extends State<Search> {
           ),
           textAlign: TextAlign.center,
         ),
+        const SizedBox(
+          height: 20,
+        ),
+        BlocConsumer<GenreBloc, GenreState>(
+          bloc: _genreBloc,
+          listener: (context, state) {
+            if (state is GenreFailed) {
+              showCustomSnackbar(context, state.e);
+            }
+          },
+          builder: (context, state) {
+            return BlocBuilder<GenreBloc, GenreState>(
+              bloc: _genreBloc,
+              builder: (context, state) {
+                if (state is GenreSuccess) {
+                  return Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: state.data
+                        .map(
+                          (genre) => CardGenre(
+                            data: genre,
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+                return Container();
+              },
+            );
+          },
+        )
       ],
     );
   }

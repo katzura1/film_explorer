@@ -711,7 +711,7 @@ class _DetailState extends State<Detail> {
                   Wrap(
                     spacing: 8.0,
                     runSpacing: 8.0,
-                    children: state.detail.genres!.map((genre) => CardGenre(name: genre.name.toString())).toList(),
+                    children: state.detail.genres!.map((genre) => CardGenre(data: genre)).toList(),
                   ),
                 ] else ...[
                   Center(

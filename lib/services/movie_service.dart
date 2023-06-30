@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:film_explorer/models/credit_movie_model.dart';
 import 'package:film_explorer/models/detail_movie_model.dart';
+import 'package:film_explorer/models/genre_model.dart';
 import 'package:film_explorer/models/list_movie_model.dart';
 import 'package:film_explorer/models/review_movie_model.dart';
 import 'package:film_explorer/models/trailer_movie_model.dart';
@@ -92,7 +93,7 @@ class MovieService {
 
   Future<ListMovieModel> searchMovies(String param, int page) async {
     try {
-      print("$baseUrl/search/movie?query=$param&language=en-US&page=$page&region=id,us");
+      // print("$baseUrl/search/movie?query=$param&language=en-US&page=$page&region=id,us");
       final res = await http.get(
         Uri.parse("$baseUrl/search/movie?query=$param&language=en-US&page=$page&region=id,us"),
         headers: {
@@ -207,6 +208,52 @@ class MovieService {
                 (trailer) => TrailerMovieModel.fromJson(trailer),
               ),
         );
+      } else {
+        throw Exception("Failed to connect to the server");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<GenreModel>> getGenres() async {
+    // print("$baseUrl/genre/movie/list?language=en%2Cid");
+    try {
+      final res = await http.get(
+        Uri.parse("$baseUrl/genre/movie/list?language=en%2Cid"),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      // print(res.body);
+      if (res.statusCode == 200) {
+        return List<GenreModel>.from(
+          json.decode(res.body)['genres'].map(
+                (genre) => GenreModel.fromJson(genre),
+              ),
+        );
+      } else {
+        throw Exception("Failed to connect to the server");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ListMovieModel> getMovieByGenre(int genreId, int page) async {
+    try {
+      final res = await http.get(
+        Uri.parse(
+            "$baseUrl/discover/movie?include_adult=false&include_video=false&language=en-US%2Cid&page=$page&sort_by=popularity.desc&with_genres=$genreId"),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (res.statusCode == 200) {
+        // print(res.body);
+        return ListMovieModel.fromJson(json.decode(res.body));
       } else {
         throw Exception("Failed to connect to the server");
       }
