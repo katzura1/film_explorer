@@ -1,4 +1,3 @@
-import 'package:film_explorer/blocs/genre/genre_bloc.dart';
 import 'package:film_explorer/blocs/genre_movie/genre_movie_bloc.dart';
 import 'package:film_explorer/shared/functions.dart';
 import 'package:film_explorer/shared/theme.dart';

@@ -20,8 +20,8 @@ class ShimmerParagraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         ShimmerLine(),
         ShimmerLine(),
         ShimmerLine(),
@@ -70,11 +70,11 @@ class ShimmerSearchCardMovie extends StatelessWidget {
           const SizedBox(
             width: 12,
           ),
-          Expanded(
+          const Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 ShimmerLine(),
                 ShimmerLine(),
                 ShimmerLine(),

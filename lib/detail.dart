@@ -432,11 +432,11 @@ class _DetailState extends State<Detail> {
                 const SizedBox(
                   height: 24,
                 ),
-                SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+                const SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: const [
+                    children: [
                       CategoryCard(
                         name: "About Movie",
                         isSelected: true,

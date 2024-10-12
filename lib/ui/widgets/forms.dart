@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final Function(String)? onChanged;
 
   const CustomTextFormField(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.hintText,
       this.isObsecure = false,
@@ -20,8 +20,7 @@ class CustomTextFormField extends StatelessWidget {
       this.isShowTitle = true,
       this.keyboardType,
       this.onFieldSubmited,
-      this.onChanged})
-      : super(key: key);
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
